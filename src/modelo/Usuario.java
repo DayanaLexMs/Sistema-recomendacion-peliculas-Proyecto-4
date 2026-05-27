@@ -13,6 +13,10 @@ public class Usuario {
     
     private String id;
     private String nombre;
+    private String nomUsuario;
+    private String cedula;
+    private String correoElectronico;
+    private String contraseña;
     private Fecha fechaRegistro;
     private ArrayList <Genero> preferencias; //lista de preferencias
     private ArrayList <Pelicula> peliculasVistas;
@@ -20,9 +24,13 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String id, String nombre, Fecha fechaRegistro, ArrayList<Genero> preferencias, ArrayList<Pelicula> peliculasVistas) {
+    public Usuario(String id, String nombre, String nomUsuario, String cedula, String correoElectronico, String contraseña, Fecha fechaRegistro, ArrayList<Genero> preferencias, ArrayList<Pelicula> peliculasVistas) {
         this.id = id;
         this.nombre = nombre;
+        this.nomUsuario = nomUsuario;
+        this.cedula = cedula;
+        this.correoElectronico = correoElectronico;
+        this.contraseña = contraseña;
         this.fechaRegistro = fechaRegistro;
         this.preferencias = preferencias;
         this.peliculasVistas = peliculasVistas;
@@ -42,6 +50,38 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getNomUsuario() {
+        return nomUsuario;
+    }
+
+    public void setNomUsuario(String nomUsuario) {
+        this.nomUsuario = nomUsuario;
+    }
+
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
     public Fecha getFechaRegistro() {
@@ -67,7 +107,5 @@ public class Usuario {
     public void setPeliculasVistas(ArrayList<Pelicula> peliculasVistas) {
         this.peliculasVistas = peliculasVistas;
     }
-    
-    
     
 }
