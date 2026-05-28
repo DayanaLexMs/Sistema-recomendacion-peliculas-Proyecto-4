@@ -4,13 +4,36 @@
  */
 package controlador;
 import javax.swing.JOptionPane;
+import modelo.*;
+import vista.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  *
  * @author USUARIO
  */
-public class ControladorSistema {
+public class ControladorSistema implements ActionListener {
     
+    JFRegistroUsuario frmUsuario = new JFRegistroUsuario ();
+    JFNotFlix frmPrincipal = new JFNotFlix ();
+    JFCalificar frmCalificar = new JFCalificar ();
+
+    public ControladorSistema() {
+    }
     
+    public ControladorSistema (JFNotFlix frmPrincipal, JFRegistroUsuario frmUsuario, JFCalificar frmCalificar) {
+        this.frmPrincipal = frmPrincipal;
+        this.frmUsuario = frmUsuario;
+        this.frmCalificar = frmCalificar;
+        
+    }
+    
+    @Override
+    public void actionPerformed (ActionEvent e){
+        
+        
+        
+    }
     
 }
