@@ -17,23 +17,21 @@ public class Usuario {
     private String cedula;
     private String correoElectronico;
     private String contraseña;
-    private Fecha fechaRegistro;
     private ArrayList <Genero> preferencias; //lista de preferencias
     private ArrayList <Pelicula> peliculasVistas;
+    
 
     public Usuario() {
     }
 
-    public Usuario(String id, String nombre, String nomUsuario, String cedula, String correoElectronico, String contraseña, Fecha fechaRegistro, ArrayList<Genero> preferencias, ArrayList<Pelicula> peliculasVistas) {
+    public Usuario(String id, String nombre, String nomUsuario, String cedula, String correoElectronico, String contraseña, ArrayList<Genero> preferencias) {
         this.id = id;
         this.nombre = nombre;
         this.nomUsuario = nomUsuario;
         this.cedula = cedula;
         this.correoElectronico = correoElectronico;
-        this.contraseña = contraseña;
-        this.fechaRegistro = fechaRegistro;
         this.preferencias = preferencias;
-        this.peliculasVistas = peliculasVistas;
+        this.peliculasVistas = new ArrayList <>();
     }
 
     public String getId() {
@@ -84,14 +82,6 @@ public class Usuario {
         this.contraseña = contraseña;
     }
 
-    public Fecha getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(Fecha fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
     public ArrayList<Genero> getPreferencias() {
         return preferencias;
     }
@@ -106,6 +96,11 @@ public class Usuario {
 
     public void setPeliculasVistas(ArrayList<Pelicula> peliculasVistas) {
         this.peliculasVistas = peliculasVistas;
+    }
+    
+    @Override
+    public String toString() {
+        return "Usuario{" + "id=" + id + ", nombre=" + nombre + ", nomUsuario=" + nomUsuario + ", cedula=" + cedula + ", correoElectronico=" + correoElectronico + ", contrase\u00f1a=" + contraseña + ", preferencias=" + preferencias + ", peliculasVistas=" + peliculasVistas + '}';
     }
     
 }
