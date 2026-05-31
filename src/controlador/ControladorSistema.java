@@ -36,9 +36,11 @@ public class ControladorSistema implements ActionListener {
         
         this.frmUsuario.btnRegistrarse.addActionListener(this);
         this.frmPrincipal.btnFrmRegistrarse.addActionListener(this);
+        this.frmPrincipal.btnBuscarGenero.addActionListener(this);
         
         crearPeliculas ();
         crearBotonesPeliculas ();
+        llenarCombo ();
     }
     
     @Override
@@ -53,6 +55,16 @@ public class ControladorSistema implements ActionListener {
             this.frmUsuario.setLocationRelativeTo(null);
         }
         
+        if (e.getSource()==this.frmPrincipal.btnBuscarGenero){
+            buscarGenero ();
+        }
+        
+    }
+    
+    private void llenarCombo (){
+        for (Genero g : Genero.values()) {
+            frmPrincipal.cmbGeneros.addItem(g.toString());
+        }
     }
     
     public void registrarUsuario (){
@@ -140,7 +152,44 @@ public class ControladorSistema implements ActionListener {
         for (Pelicula p: listaPeliculas){
             JButton btn = new JButton (p.getTitulo());
             this.frmPrincipal.panelPeliculas.add(btn);
+            btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
+                });
         }
+        
+        this.frmPrincipal.panelPeliculas.revalidate();
+        this.frmPrincipal.panelPeliculas.repaint();
+    }
+    
+    public void buscarGenero (){
+        String genero = this.frmPrincipal.cmbGeneros.getSelectedItem().toString();
+        this.frmPrincipal.panelPeliculas.removeAll();
+        
+        for (Pelicula p: listaPeliculas){
+            if (p.getGenero() == Genero.valueOf(genero)){
+                JButton btn = new JButton (p.getTitulo());
+                this.frmPrincipal.panelPeliculas.add(btn);
+                 btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
+                    });
+            }
+        }
+        
+        this.frmPrincipal.panelPeliculas.revalidate();
+        this.frmPrincipal.panelPeliculas.repaint();
+    }
+    
+    public void calificarPelicula (String nomPelicula){
+        this.frmCalificar.setVisible(true);
+        this.frmCalificar.setLocationRelativeTo(null);
+        this.frmCalificar.lblPelicula1.setText(nomPelicula);
+    }
+    
+    public Pelicula buscarPelicula (String nomPelicula){
+            for (Pelicula p: listaPeliculas){
+                if (p.getTitulo().equals(nomPelicula)){
+                    return p;
+                }
+            }
+        return null;
     }
     
     // btn.addActionListener(e -> seleccionarPuesto(num_puesto, numeroPuesto));
