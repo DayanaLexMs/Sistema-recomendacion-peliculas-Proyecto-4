@@ -125,8 +125,8 @@ public class ControladorSistema implements ActionListener {
     
     private void crearPeliculas (){
         listaPeliculas.add(new Pelicula("Scary movie", Genero.TERRROR, 2, 2000, "Cris Evans", 0, "Una pelicula de miedo","/Imagenes/ScaryMovie.png"));
-        /*listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico."));
-        listaPeliculas.add(new Pelicula("Vengadores: Endgame", Genero.ACCION, 3.0, 2019, "Anthony Russo", 0, "Los heroes enfrentan a Thanos."));
+        listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico.", "/Imagenes/Titanic.jpg"));
+        /*listaPeliculas.add(new Pelicula("Vengadores: Endgame", Genero.ACCION, 3.0, 2019, "Anthony Russo", 0, "Los heroes enfrentan a Thanos."));
         listaPeliculas.add(new Pelicula("El caballero de la noche", Genero.ACCION, 2.5, 2008, "Christopher Nolan", 0, "Batman lucha contra el Joker."));
         listaPeliculas.add(new Pelicula("Forrest Gump", Genero.DRAMA, 2.3, 1994, "Robert Zemeckis", 0, "La extraordinaria vida de Forrest."));
         listaPeliculas.add(new Pelicula("Interestelar", Genero.CIENCIAFICCION, 2.8, 2014, "Christopher Nolan", 0, "Viaje espacial para salvar a la humanidad."));
@@ -149,22 +149,22 @@ public class ControladorSistema implements ActionListener {
     
     private void crearBotonesPeliculas (){
         this.frmPrincipal.panelPeliculas.removeAll();
-        this.frmPrincipal.panelPeliculas.setLayout(new GridLayout(0, 5, 10, 10));
         this.frmPrincipal.panelPeliculas.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
         
         for (Pelicula p: listaPeliculas){
             ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(p.getPoster()));
-            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(120, 180, Image.SCALE_SMOOTH);
+            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(150, 225, Image.SCALE_SMOOTH);
             ImageIcon icono = new ImageIcon(imagenEscalada);
             JButton btn = new JButton (icono);
             this.frmPrincipal.panelPeliculas.add(btn);
             btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
                 });
             
-            btn.setPreferredSize(new Dimension(130, 190));
+            btn.setPreferredSize(new Dimension(160, 235));
             //btn.setBorderPainted(false);
             //btn.setContentAreaFilled(false);
             //btn.setFocusPainted(false);
+            btn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         }
         
         this.frmPrincipal.panelPeliculas.revalidate();
