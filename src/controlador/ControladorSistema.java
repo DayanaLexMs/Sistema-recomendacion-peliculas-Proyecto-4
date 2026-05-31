@@ -24,6 +24,7 @@ public class ControladorSistema implements ActionListener {
     
     ArrayList <Usuario> listaUsuarios;
     ArrayList <Pelicula> listaPeliculas;
+    ArrayList <VerPelicula> listaCalificaciones;
 
     public ControladorSistema() {
     }
@@ -34,12 +35,14 @@ public class ControladorSistema implements ActionListener {
         this.frmCalificar = frmCalificar;
         this.listaUsuarios = new ArrayList <>();
         this.listaPeliculas = new ArrayList <> ();
+        this.listaCalificaciones = new ArrayList <> ();
         
         this.frmUsuario.btnRegistrarse.addActionListener(this);
         this.frmPrincipal.btnFrmRegistrarse.addActionListener(this);
         this.frmPrincipal.btnBuscarGenero.addActionListener(this);
         this.frmPrincipal.btnIniciarSesion.addActionListener(this);
         this.frmPrincipal.btnRecomendar.addActionListener(this);
+        this.frmCalificar.btnEnviarCalificacion.addActionListener(this);
         
         crearPeliculas ();
         crearBotonesPeliculas ();
@@ -68,6 +71,10 @@ public class ControladorSistema implements ActionListener {
         
         if (e.getSource()==this.frmPrincipal.btnRecomendar){
             actualizarBotones ();
+        }
+        
+        if (e.getSource()==this.frmCalificar.btnEnviarCalificacion){
+            enviarCalificacion ();
         }
         
     }
@@ -185,9 +192,12 @@ public class ControladorSistema implements ActionListener {
         this.frmPrincipal.panelPeliculas.repaint();
     }
     
+    
+    
     //public Pelicula(String titulo, Genero genero, double duracion, int año, String director, double calificacionProm, String sinopsis)
     
     private void crearPeliculas (){
+        //(String titulo, Genero genero, double duracion, int año, String director, double calificacionProm, String sinopsis, String poster)
         listaPeliculas.add(new Pelicula("Scary movie", Genero.TERRROR, 2, 2000, "Cris Evans", 0, "Una pelicula de miedo","/Imagenes/ScaryMovie.png"));
         listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico.","/Imagenes/Titanic.jpg"));
         listaPeliculas.add(new Pelicula("Vengadores: Endgame", Genero.ACCION, 3.0, 2019, "Anthony Russo", 0, "Los heroes enfrentan a Thanos.","/Imagenes/VengadoresEndGame.jpg"));
@@ -272,6 +282,73 @@ public class ControladorSistema implements ActionListener {
         this.frmCalificar.lblPelicula1.setText(nomPelicula);
     }
     
+    public void enviarCalificacion (){
+        String comentario = this.frmCalificar.txtComentario.getText();
+        
+        Usuario u = buscarUsuario (this.frmPrincipal.lblUsuario.getText());
+        Pelicula p = buscarPelicula (this.frmCalificar.lblPelicula1.getText());
+        
+        try {
+            Double var = Double.valueOf(this.frmCalificar.txtCalificacion.getText());
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "EL VALOR DE LA CALIFICACION DEBE SER DE 1 A 5");
+            reiniciarCamposCalificar();
+            return;
+        }
+        
+        try {
+            Fecha fe = this.crearFecha(this.frmCalificar.txtFecha.getText());
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "DIGITE LA FECHA EN EL FORMATO DD/MM/YYYY");
+            reiniciarCamposCalificar();
+            return;
+        }
+        
+        Double calificacion = Double.valueOf(this.frmCalificar.txtCalificacion.getText());
+        Fecha fechaV = this.crearFecha(this.frmCalificar.txtFecha.getText());
+        
+        if (this.frmCalificar.txtCalificacion.getText().isBlank()||comentario.isBlank()||this.frmCalificar.txtFecha.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "PORFAVOR LLENE TODOS LOS CAMPOS");
+        }
+        
+        else {
+            //(Usuario usuario, Pelicula pelicula, Fecha fechaVista, double calificacion, String comentario) 
+            VerPelicula ver = new VerPelicula (u, p, fechaV, calificacion, comentario);
+            listaCalificaciones.add(ver);
+            actualizarCalificacion (p, calificacion);
+        }
+        reiniciarCamposCalificar();
+    }
+    
+    public void actualizarCalificacion (Pelicula pe, Double calificacion){
+        Double total = 0.0;
+        Double cant = 0.0;
+        for (VerPelicula v: listaCalificaciones){
+            if (v.getPelicula().getTitulo().equals(pe.getTitulo())){
+                total += v.getCalificacion();
+                cant += 1;
+            }
+        }
+        Double calificacionProm = total/cant;
+        pe.setCalificacionProm(calificacionProm);
+    }
+    
+    public Fecha crearFecha (String fechaa){
+        
+        String [] fechas = fechaa.split("/");
+        int [] fecha = new int [fechas.length];
+        
+        for (int i = 0; i<3; i++){
+            fecha [i] = Integer.parseInt(fechas [i]);
+        }
+        
+        Fecha f = new Fecha (fecha[0], fecha[1], fecha[2]);
+        
+        return f;
+    }
+    
     public Usuario buscarUsuario (String usuario){
         for (Usuario u: listaUsuarios){
             if (u.getNomUsuario().equals(usuario)){
@@ -306,6 +383,12 @@ public class ControladorSistema implements ActionListener {
         this.frmUsuario.chkRomance.setSelected(false);
         this.frmUsuario.chkSuspenso.setSelected(false);
         this.frmUsuario.chkTerror.setSelected(false);
+    }
+    
+    public void reiniciarCamposCalificar (){
+        this.frmCalificar.txtCalificacion.setText("");
+        this.frmCalificar.txtComentario.setText("");
+        this.frmCalificar.txtFecha.setText("");
     }
     
 }
