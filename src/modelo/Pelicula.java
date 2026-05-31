@@ -17,11 +17,12 @@ public class Pelicula {
     private String director;
     private double calificacionProm;
     private String sinopsis;
+    private String poster;
 
     public Pelicula() {
     }
 
-    public Pelicula(String titulo, Genero genero, double duracion, int año, String director, double calificacionProm, String sinopsis) {
+    public Pelicula(String titulo, Genero genero, double duracion, int año, String director, double calificacionProm, String sinopsis, String poster) {
         this.titulo = titulo;
         this.genero = genero;
         this.duracion = duracion;
@@ -29,6 +30,7 @@ public class Pelicula {
         this.director = director;
         this.calificacionProm = calificacionProm;
         this.sinopsis = sinopsis;
+        this.poster = poster;
     }
 
     public String getTitulo() {
@@ -86,7 +88,12 @@ public class Pelicula {
     public void setSinopsis(String sinopsis) {
         this.sinopsis = sinopsis;
     }
-    
-    
-    
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
 }

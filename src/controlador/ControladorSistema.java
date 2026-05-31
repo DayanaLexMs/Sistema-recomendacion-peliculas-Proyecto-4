@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controlador;
+import java.awt.*;
 import javax.swing.JOptionPane;
 import modelo.*;
 import vista.*;
@@ -123,8 +124,8 @@ public class ControladorSistema implements ActionListener {
     //public Pelicula(String titulo, Genero genero, double duracion, int año, String director, double calificacionProm, String sinopsis)
     
     private void crearPeliculas (){
-        listaPeliculas.add(new Pelicula ("Scary movie", Genero.TERRROR, 2, 2000, "Cris Evans", 0, "Una pelicula de miedo"));
-        listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico."));
+        listaPeliculas.add(new Pelicula("Scary movie", Genero.TERRROR, 2, 2000, "Cris Evans", 0, "Una pelicula de miedo","/Imagenes/ScaryMovie.png"));
+        /*listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico."));
         listaPeliculas.add(new Pelicula("Vengadores: Endgame", Genero.ACCION, 3.0, 2019, "Anthony Russo", 0, "Los heroes enfrentan a Thanos."));
         listaPeliculas.add(new Pelicula("El caballero de la noche", Genero.ACCION, 2.5, 2008, "Christopher Nolan", 0, "Batman lucha contra el Joker."));
         listaPeliculas.add(new Pelicula("Forrest Gump", Genero.DRAMA, 2.3, 1994, "Robert Zemeckis", 0, "La extraordinaria vida de Forrest."));
@@ -143,17 +144,27 @@ public class ControladorSistema implements ActionListener {
         listaPeliculas.add(new Pelicula("La isla siniestra", Genero.SUSPENSO, 2.3, 2010, "Martin Scorsese", 0, "Un detective investiga una desaparicion."));
         listaPeliculas.add(new Pelicula("En busca de la felicidad", Genero.DRAMA, 2.0, 2006, "Gabriele Muccino", 0, "Un padre lucha por darle un mejor futuro a su hijo."));
         listaPeliculas.add(new Pelicula("Deadpool", Genero.COMEDIA, 1.8, 2016, "Tim Miller", 0, "Un antiheroe sarcastico busca venganza."));
+        */
     }
     
     private void crearBotonesPeliculas (){
         this.frmPrincipal.panelPeliculas.removeAll();
-        JButton [] peliculas = new javax.swing.JButton[listaPeliculas.size()];
+        this.frmPrincipal.panelPeliculas.setLayout(new GridLayout(0, 5, 10, 10));
+        this.frmPrincipal.panelPeliculas.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
         
         for (Pelicula p: listaPeliculas){
-            JButton btn = new JButton (p.getTitulo());
+            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(p.getPoster()));
+            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(120, 180, Image.SCALE_SMOOTH);
+            ImageIcon icono = new ImageIcon(imagenEscalada);
+            JButton btn = new JButton (icono);
             this.frmPrincipal.panelPeliculas.add(btn);
             btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
                 });
+            
+            btn.setPreferredSize(new Dimension(130, 190));
+            //btn.setBorderPainted(false);
+            //btn.setContentAreaFilled(false);
+            //btn.setFocusPainted(false);
         }
         
         this.frmPrincipal.panelPeliculas.revalidate();
