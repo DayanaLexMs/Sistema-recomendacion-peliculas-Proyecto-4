@@ -38,6 +38,8 @@ public class ControladorSistema implements ActionListener {
         this.frmUsuario.btnRegistrarse.addActionListener(this);
         this.frmPrincipal.btnFrmRegistrarse.addActionListener(this);
         this.frmPrincipal.btnBuscarGenero.addActionListener(this);
+        this.frmPrincipal.btnIniciarSesion.addActionListener(this);
+        this.frmPrincipal.btnRecomendar.addActionListener(this);
         
         crearPeliculas ();
         crearBotonesPeliculas ();
@@ -58,6 +60,14 @@ public class ControladorSistema implements ActionListener {
         
         if (e.getSource()==this.frmPrincipal.btnBuscarGenero){
             buscarGenero ();
+        }
+        
+        if (e.getSource()==this.frmPrincipal.btnIniciarSesion){
+            iniciarSesion ();
+        }
+        
+        if (e.getSource()==this.frmPrincipal.btnRecomendar){
+            actualizarBotones ();
         }
         
     }
@@ -90,6 +100,7 @@ public class ControladorSistema implements ActionListener {
             reiniciarCamposUsuario();
             JOptionPane.showMessageDialog(null, "SE REGISTRÓ CORRECTAMENTE AL USUARIO: "+usuario);
             System.out.println(listaUsuarios.getLast().toString());
+            this.frmUsuario.dispose();
         }
     }
     
@@ -121,35 +132,88 @@ public class ControladorSistema implements ActionListener {
         return aux;
     }
     
+    public void iniciarSesion (){
+        if (listaUsuarios.isEmpty()){
+            JOptionPane.showMessageDialog(null, "REGISTRESE ANTES DE INICIAR SESION");
+            this.frmUsuario.setVisible(true);
+            this.frmUsuario.setLocationRelativeTo(null);
+            return;
+        }
+        
+        String usuario = JOptionPane.showInputDialog("Ingrese su usuario:");
+        String contraseña = JOptionPane.showInputDialog("Ingrese su contraseña:");
+        
+        if (usuario.isEmpty()||contraseña.isEmpty()){
+            JOptionPane.showMessageDialog(null, "POR FAVOR DIGITE LOS DATOS COMPLETOS E INTENTE DE NUEVO");
+        }
+        
+        else {
+            for (Usuario u: listaUsuarios){
+                if (u.getNomUsuario().equals(usuario)){
+                    if (u.getContraseña().equals(contraseña)){
+                        this.frmPrincipal.lblUsuario.setText(usuario);
+                    }
+                }
+            }
+            actualizarBotones();
+        }
+    }
+    
+    public void actualizarBotones (){
+        Usuario usu = buscarUsuario (this.frmPrincipal.lblUsuario.getText());
+        this.frmPrincipal.panelPeliculas.removeAll();
+        for (Genero g: usu.getPreferencias()){
+            for (Pelicula p: listaPeliculas){
+                if (p.getGenero().equals(g)){
+                    ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(p.getPoster()));
+                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(150, 225, Image.SCALE_SMOOTH);
+                    ImageIcon icono = new ImageIcon(imagenEscalada);
+                    JButton btn = new JButton (icono);
+                    this.frmPrincipal.panelPeliculas.add(btn);
+                    btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
+                        });
+            
+                    btn.setPreferredSize(new Dimension(160, 235));
+                    //btn.setBorderPainted(false);
+                    //btn.setContentAreaFilled(false);
+                    //btn.setFocusPainted(false);
+                    btn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+                }
+            }
+        }
+        this.frmPrincipal.panelPeliculas.revalidate();
+        this.frmPrincipal.panelPeliculas.repaint();
+    }
+    
     //public Pelicula(String titulo, Genero genero, double duracion, int año, String director, double calificacionProm, String sinopsis)
     
     private void crearPeliculas (){
         listaPeliculas.add(new Pelicula("Scary movie", Genero.TERRROR, 2, 2000, "Cris Evans", 0, "Una pelicula de miedo","/Imagenes/ScaryMovie.png"));
-        listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico.", "/Imagenes/Titanic.jpg"));
-        /*listaPeliculas.add(new Pelicula("Vengadores: Endgame", Genero.ACCION, 3.0, 2019, "Anthony Russo", 0, "Los heroes enfrentan a Thanos."));
-        listaPeliculas.add(new Pelicula("El caballero de la noche", Genero.ACCION, 2.5, 2008, "Christopher Nolan", 0, "Batman lucha contra el Joker."));
-        listaPeliculas.add(new Pelicula("Forrest Gump", Genero.DRAMA, 2.3, 1994, "Robert Zemeckis", 0, "La extraordinaria vida de Forrest."));
-        listaPeliculas.add(new Pelicula("Interestelar", Genero.CIENCIAFICCION, 2.8, 2014, "Christopher Nolan", 0, "Viaje espacial para salvar a la humanidad."));
-        listaPeliculas.add(new Pelicula("El conjuro", Genero.TERRROR, 1.9, 2013, "James Wan", 0, "Una familia es aterrorizada por una entidad maligna."));
-        listaPeliculas.add(new Pelicula("Diario de una pasion", Genero.ROMANCE, 2.0, 2004, "Nick Cassavetes", 0, "Una historia de amor inolvidable."));
-        listaPeliculas.add(new Pelicula("Supercool", Genero.COMEDIA, 1.9, 2007, "Greg Mottola", 0, "Dos amigos viven una noche caotica."));
-        listaPeliculas.add(new Pelicula("El origen", Genero.CIENCIAFICCION, 2.4, 2010, "Christopher Nolan", 0, "Un experto invade los sueños."));
-        listaPeliculas.add(new Pelicula("Guason", Genero.DRAMA, 2.0, 2019, "Todd Phillips", 0, "El origen del villano mas famoso de Gotham."));
-        listaPeliculas.add(new Pelicula("Parasitos", Genero.SUSPENSO, 2.1, 2019, "Bong Joon-ho", 0, "Dos familias de clases sociales opuestas se cruzan."));
-        listaPeliculas.add(new Pelicula("Mision imposible: Repercusion", Genero.ACCION, 2.3, 2018, "Christopher McQuarrie", 0, "Ethan Hunt intenta detener una amenaza global."));
-        listaPeliculas.add(new Pelicula("¿Que paso ayer?", Genero.COMEDIA, 1.8, 2009, "Todd Phillips", 0, "Una despedida de soltero fuera de control."));
-        listaPeliculas.add(new Pelicula("Un lugar en silencio", Genero.TERRROR, 1.7, 2018, "John Krasinski", 0, "Una familia debe vivir sin hacer ruido."));
-        listaPeliculas.add(new Pelicula("La La Land", Genero.ROMANCE, 2.1, 2016, "Damien Chazelle", 0, "Dos artistas persiguen sus sueños."));
-        listaPeliculas.add(new Pelicula("Matrix", Genero.CIENCIAFICCION, 2.3, 1999, "Lana Wachowski", 0, "Un hombre descubre la verdad sobre su realidad."));
-        listaPeliculas.add(new Pelicula("La isla siniestra", Genero.SUSPENSO, 2.3, 2010, "Martin Scorsese", 0, "Un detective investiga una desaparicion."));
-        listaPeliculas.add(new Pelicula("En busca de la felicidad", Genero.DRAMA, 2.0, 2006, "Gabriele Muccino", 0, "Un padre lucha por darle un mejor futuro a su hijo."));
-        listaPeliculas.add(new Pelicula("Deadpool", Genero.COMEDIA, 1.8, 2016, "Tim Miller", 0, "Un antiheroe sarcastico busca venganza."));
-        */
+        listaPeliculas.add(new Pelicula("Titanic", Genero.ROMANCE, 3.2, 1997, "James Cameron", 0, "Historia de amor en el famoso transatlantico.","/Imagenes/Titanic.jpg"));
+        listaPeliculas.add(new Pelicula("Vengadores: Endgame", Genero.ACCION, 3.0, 2019, "Anthony Russo", 0, "Los heroes enfrentan a Thanos.","/Imagenes/VengadoresEndGame.jpg"));
+        listaPeliculas.add(new Pelicula("El caballero de la noche", Genero.ACCION, 2.5, 2008, "Christopher Nolan", 0, "Batman lucha contra el Joker.","/Imagenes/CaballeroNoche.png"));
+        listaPeliculas.add(new Pelicula("Forrest Gump", Genero.DRAMA, 2.3, 1994, "Robert Zemeckis", 0, "La extraordinaria vida de Forrest.","/Imagenes/ForrestGump.jpg"));
+        listaPeliculas.add(new Pelicula("Interestelar", Genero.CIENCIAFICCION, 2.8, 2014, "Christopher Nolan", 0, "Viaje espacial para salvar a la humanidad.","/Imagenes/Interestelar.jpg"));
+        listaPeliculas.add(new Pelicula("El conjuro", Genero.TERRROR, 1.9, 2013, "James Wan", 0, "Una familia es aterrorizada por una entidad maligna.","/Imagenes/ElConjuro.jpg"));
+        listaPeliculas.add(new Pelicula("Diario de una pasion", Genero.ROMANCE, 2.0, 2004, "Nick Cassavetes", 0, "Una historia de amor inolvidable.","/Imagenes/DiarioPasion.jpg"));
+        listaPeliculas.add(new Pelicula("Supercool", Genero.COMEDIA, 1.9, 2007, "Greg Mottola", 0, "Dos amigos viven una noche caotica.","/Imagenes/Supercool.jpg"));
+        listaPeliculas.add(new Pelicula("El origen", Genero.CIENCIAFICCION, 2.4, 2010, "Christopher Nolan", 0, "Un experto invade los sueños.","/Imagenes/Origen.jpg"));
+        listaPeliculas.add(new Pelicula("Guason", Genero.DRAMA, 2.0, 2019, "Todd Phillips", 0, "El origen del villano mas famoso de Gotham.","/Imagenes/Guason.jpg"));
+        listaPeliculas.add(new Pelicula("Parasitos", Genero.SUSPENSO, 2.1, 2019, "Bong Joon-ho", 0, "Dos familias de clases sociales opuestas se cruzan.","/Imagenes/Parasitos.png"));
+        listaPeliculas.add(new Pelicula("Mision imposible: Repercusion", Genero.ACCION, 2.3, 2018, "Christopher McQuarrie", 0, "Ethan Hunt intenta detener una amenaza global.","/Imagenes/MisionImposible.jpg"));
+        listaPeliculas.add(new Pelicula("¿Que paso ayer?", Genero.COMEDIA, 1.8, 2009, "Todd Phillips", 0, "Una despedida de soltero fuera de control.","/Imagenes/QuePasoAyer.jpg"));
+        listaPeliculas.add(new Pelicula("Un lugar en silencio", Genero.TERRROR, 1.7, 2018, "John Krasinski", 0, "Una familia debe vivir sin hacer ruido.","/Imagenes/UnLugarSilencio.jpg"));
+        listaPeliculas.add(new Pelicula("La La Land", Genero.ROMANCE, 2.1, 2016, "Damien Chazelle", 0, "Dos artistas persiguen sus sueños.","/Imagenes/Lalaland.png"));
+        listaPeliculas.add(new Pelicula("Matrix", Genero.CIENCIAFICCION, 2.3, 1999, "Lana Wachowski", 0, "Un hombre descubre la verdad sobre su realidad.","/Imagenes/Matrix.jpg"));
+        listaPeliculas.add(new Pelicula("La isla siniestra", Genero.SUSPENSO, 2.3, 2010, "Martin Scorsese", 0, "Un detective investiga una desaparicion.","/Imagenes/LaIslaSiniestra.jpg"));
+        listaPeliculas.add(new Pelicula("En busca de la felicidad", Genero.DRAMA, 2.0, 2006, "Gabriele Muccino", 0, "Un padre lucha por darle un mejor futuro a su hijo.","/Imagenes/BuscaFelicidad.jpg"));
+        listaPeliculas.add(new Pelicula("Deadpool", Genero.COMEDIA, 1.8, 2016, "Tim Miller", 0, "Un antiheroe sarcastico busca venganza.","/Imagenes/Deadpool.jpg"));
     }
     
     private void crearBotonesPeliculas (){
         this.frmPrincipal.panelPeliculas.removeAll();
         this.frmPrincipal.panelPeliculas.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
+        this.frmPrincipal.panelPeliculas.setLayout(new GridLayout(0, 5, 10, 10));
         
         for (Pelicula p: listaPeliculas){
             ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(p.getPoster()));
@@ -175,12 +239,26 @@ public class ControladorSistema implements ActionListener {
         String genero = this.frmPrincipal.cmbGeneros.getSelectedItem().toString();
         this.frmPrincipal.panelPeliculas.removeAll();
         
+        if (genero.equals("TODOS")){
+            crearBotonesPeliculas();
+            return;
+        }
+        
         for (Pelicula p: listaPeliculas){
             if (p.getGenero() == Genero.valueOf(genero)){
-                JButton btn = new JButton (p.getTitulo());
+                ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(p.getPoster()));
+                Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(150, 225, Image.SCALE_SMOOTH);
+                ImageIcon icono = new ImageIcon(imagenEscalada);
+                JButton btn = new JButton (icono);
                 this.frmPrincipal.panelPeliculas.add(btn);
-                 btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
+                btn.addActionListener(e -> { calificarPelicula (p.getTitulo());
                     });
+            
+                btn.setPreferredSize(new Dimension(160, 235));
+                //btn.setBorderPainted(false);
+                //btn.setContentAreaFilled(false);
+                //btn.setFocusPainted(false);
+                btn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             }
         }
         
@@ -192,6 +270,15 @@ public class ControladorSistema implements ActionListener {
         this.frmCalificar.setVisible(true);
         this.frmCalificar.setLocationRelativeTo(null);
         this.frmCalificar.lblPelicula1.setText(nomPelicula);
+    }
+    
+    public Usuario buscarUsuario (String usuario){
+        for (Usuario u: listaUsuarios){
+            if (u.getNomUsuario().equals(usuario)){
+                return u;
+            }
+        }
+        return null;
     }
     
     public Pelicula buscarPelicula (String nomPelicula){
@@ -209,8 +296,16 @@ public class ControladorSistema implements ActionListener {
         this.frmUsuario.txtNom.setText("");
         this.frmUsuario.txtCedula.setText("");
         this.frmUsuario.txtCorreo.setText("");
+        this.frmUsuario.txtUsuario.setText("");
         this.frmUsuario.txtContraseña.setText("");
         this.frmUsuario.txtVerContraseña.setText("");
+        this.frmUsuario.chkAccion.setSelected(false);
+        this.frmUsuario.chkCienciaFiccion.setSelected(false);
+        this.frmUsuario.chkComedia.setSelected(false);
+        this.frmUsuario.chkDrama.setSelected(false);
+        this.frmUsuario.chkRomance.setSelected(false);
+        this.frmUsuario.chkSuspenso.setSelected(false);
+        this.frmUsuario.chkTerror.setSelected(false);
     }
     
 }

@@ -30,6 +30,7 @@ public class Usuario {
         this.nomUsuario = nomUsuario;
         this.cedula = cedula;
         this.correoElectronico = correoElectronico;
+        this.contraseña = contraseña;
         this.preferencias = preferencias;
         this.peliculasVistas = new ArrayList <>();
     }
