@@ -215,6 +215,7 @@ public class ControladorSistema implements ActionListener {
     
     public void recomendacionesCalificaciones (){
         Usuario usu = buscarUsuario (this.frmPrincipal.lblUsuario.getText());
+        this.frmPrincipal.panelPeliculas.removeAll();
         
         if (usu==null){
             JOptionPane.showMessageDialog(null, "POR FAVOR INICIE SESIÓN PRIMERO");
@@ -236,6 +237,7 @@ public class ControladorSistema implements ActionListener {
     
     public void mejorCalif (){
         ArrayList <Pelicula> copiaPeliculas = new ArrayList <>();
+        this.frmPrincipal.panelPeliculas.removeAll();
         for (Pelicula p: listaPeliculas){
             copiaPeliculas.add(p);
         }
@@ -305,15 +307,18 @@ public class ControladorSistema implements ActionListener {
             JOptionPane.showMessageDialog(null, "DIGITE EL NOMBRE DE LA PELICULA A BUSCAR");
             return;
         }
+        
         if (buscarPelicula(titulo)==null){
             JOptionPane.showMessageDialog(null, "NO SE ENCONTRÓ LA PELICULA INGRESADA");
             return;
         }
+        
         for (Pelicula p: listaPeliculas){
-            if (p.getTitulo().equals(titulo)){
+            if (p.getTitulo().equalsIgnoreCase(titulo)){
                 this.frmPrincipal.panelPeliculas.add(crearBoton(p));
             }
         }
+        
         this.frmPrincipal.panelPeliculas.revalidate();
         this.frmPrincipal.panelPeliculas.repaint();
     }
@@ -402,7 +407,7 @@ public class ControladorSistema implements ActionListener {
     
     public Pelicula buscarPelicula (String nomPelicula){
             for (Pelicula p: listaPeliculas){
-                if (p.getTitulo().equals(nomPelicula)){
+                if (p.getTitulo().equalsIgnoreCase(nomPelicula)){
                     return p;
                 }
             }

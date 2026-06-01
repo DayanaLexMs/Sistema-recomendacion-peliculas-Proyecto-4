@@ -47,7 +47,6 @@ public class JFNotFlix extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu = new javax.swing.JMenu();
         btnFrmRegistrarse = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,10 +177,6 @@ public class JFNotFlix extends javax.swing.JFrame {
         btnFrmRegistrarse.setText("Registrarse");
         jMenu.add(btnFrmRegistrarse);
 
-        jMenuItem2.setText("Registrar película");
-        jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
-        jMenu.add(jMenuItem2);
-
         jMenuBar1.add(jMenu);
 
         setJMenuBar(jMenuBar1);
@@ -199,10 +194,6 @@ public class JFNotFlix extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
@@ -260,7 +251,6 @@ public class JFNotFlix extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     public javax.swing.JMenu jMenu;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel lblUsuario;
