@@ -324,6 +324,13 @@ public class ControladorSistema implements ActionListener {
     }
     
     public void calificarPelicula (String nomPelicula){
+        
+        if (buscarUsuario(this.frmPrincipal.lblUsuario.getText())==null){
+            JOptionPane.showMessageDialog(null, "USUARIO NO ENCONTRADO, INICIE SESION ANTES DE CALIFICAR");
+            iniciarSesion(); 
+            return;
+        }
+        
         this.frmCalificar.setVisible(true);
         this.frmCalificar.setLocationRelativeTo(null);
         this.frmCalificar.lblPelicula1.setText(nomPelicula);
@@ -360,11 +367,18 @@ public class ControladorSistema implements ActionListener {
             JOptionPane.showMessageDialog(null, "PORFAVOR LLENE TODOS LOS CAMPOS");
         }
         
+        if (u==null){
+                JOptionPane.showMessageDialog(null, "INICIE SESION ANTES DE CALIFICAR");
+            return;
+        }
+        
         else {
             //(Usuario usuario, Pelicula pelicula, Fecha fechaVista, double calificacion, String comentario) 
             VerPelicula ver = new VerPelicula (u, p, fechaV, calificacion, comentario);
             listaCalificaciones.add(ver);
             actualizarCalificacion (p, calificacion);
+            this.frmCalificar.dispose();
+            JOptionPane.showMessageDialog(null, "SE REGISTRÓ LA CALIFICACION PARA LA PELICULA: "+this.frmCalificar.lblPelicula1.getText());
         }
         reiniciarCamposCalificar();
     }
