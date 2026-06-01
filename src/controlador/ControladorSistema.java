@@ -44,6 +44,9 @@ public class ControladorSistema implements ActionListener {
         this.frmPrincipal.btnRecomendar.addActionListener(this);
         this.frmCalificar.btnEnviarCalificacion.addActionListener(this);
         this.frmPrincipal.btnBuscarDirector.addActionListener(this);
+        this.frmPrincipal.btnRecomCalificaciones.addActionListener(this);
+        this.frmPrincipal.btnMejorCalif.addActionListener(this);
+        this.frmPrincipal.btnBuscarTitulo.addActionListener(this);
         
         this.frmPrincipal.panelPeliculas.setLayout(new GridLayout(0, 5, 10, 10));
         crearPeliculas ();
@@ -84,6 +87,17 @@ public class ControladorSistema implements ActionListener {
             buscarDirector ();
         }
         
+        if (e.getSource()==this.frmPrincipal.btnRecomCalificaciones){
+            recomendacionesCalificaciones ();
+        }
+        
+        if (e.getSource()==this.frmPrincipal.btnMejorCalif){
+            mejorCalif ();
+        }
+        
+        if (e.getSource()==this.frmPrincipal.btnBuscarTitulo){
+            buscarTitulo ();
+        }
     }
     
     private void llenarComboDirectores() {
@@ -115,12 +129,22 @@ public class ControladorSistema implements ActionListener {
         String contra = this.frmUsuario.txtContraseña.getText();
         String contra2 = this.frmUsuario.txtVerContraseña.getText();
         
+        for (Usuario u: listaUsuarios){
+            if(u.getNomUsuario().equals(usuario)){
+                JOptionPane.showMessageDialog(null, "NOMBRE DE USUARIO YA REGISTRADO");
+                return;
+            }
+        }
+        
         if (nom.isEmpty()||ced.isEmpty()||correo.isEmpty()||contra.isEmpty()||contra2.isEmpty()||usuario.isEmpty()){
             JOptionPane.showMessageDialog(null, "DIGITE LOS DATOS COMPLETOS PARA REALIZAR EL REGISTRO");
             reiniciarCamposUsuario();
         }
         else if (contra.equals(contra2)!=true){
             JOptionPane.showMessageDialog(null, "LAS CONTRASEÑAS NO COINCIDEN, VERIFIQUE E INTENTE DE NUEVO");
+        }
+        else if (usuario.equals("Usuario")){
+            JOptionPane.showMessageDialog(null, "NOMBRE DE USUARIO INVALIDO");
         }
         else {
             Usuario u = new Usuario (listaUsuarios.size()+"", nom, usuario, ced, correo, contra, listaGeneros());
@@ -189,6 +213,38 @@ public class ControladorSistema implements ActionListener {
     return btn;
     }
     
+    public void recomendacionesCalificaciones (){
+        Usuario usu = buscarUsuario (this.frmPrincipal.lblUsuario.getText());
+        
+        if (usu==null){
+            JOptionPane.showMessageDialog(null, "POR FAVOR INICIE SESIÓN PRIMERO");
+            iniciarSesion();
+            return;
+        }
+        for (Pelicula p: listaPeliculas){
+            for (VerPelicula v: listaCalificaciones){
+                if (v.getCalificacion()>=4){
+                    if (p.getGenero()==v.getPelicula().getGenero()){
+                        this.frmPrincipal.panelPeliculas.add(crearBoton(p));
+                    }
+                }
+            }
+        }
+        this.frmPrincipal.panelPeliculas.revalidate();
+        this.frmPrincipal.panelPeliculas.repaint();
+    }
+    
+    public void mejorCalif (){
+        ArrayList <Pelicula> copiaPeliculas = new ArrayList <>();
+        for (Pelicula p: listaPeliculas){
+            copiaPeliculas.add(p);
+        }
+        copiaPeliculas.sort((p1, p2) -> Double.compare(p2.getCalificacionProm(),p1.getCalificacionProm()));
+        for (Pelicula p: copiaPeliculas){
+            this.frmPrincipal.panelPeliculas.add(crearBoton(p));
+        }
+    }
+    
     public void actualizarBotones (){
         Usuario usu = buscarUsuario (this.frmPrincipal.lblUsuario.getText());
         
@@ -237,6 +293,27 @@ public class ControladorSistema implements ActionListener {
             }
         }
         
+        this.frmPrincipal.panelPeliculas.revalidate();
+        this.frmPrincipal.panelPeliculas.repaint();
+    }
+    
+    public void buscarTitulo (){
+        String titulo = this.frmPrincipal.txtBusTitulo.getText();
+        this.frmPrincipal.panelPeliculas.removeAll();
+        
+        if (titulo.isEmpty()){
+            JOptionPane.showMessageDialog(null, "DIGITE EL NOMBRE DE LA PELICULA A BUSCAR");
+            return;
+        }
+        if (buscarPelicula(titulo)==null){
+            JOptionPane.showMessageDialog(null, "NO SE ENCONTRÓ LA PELICULA INGRESADA");
+            return;
+        }
+        for (Pelicula p: listaPeliculas){
+            if (p.getTitulo().equals(titulo)){
+                this.frmPrincipal.panelPeliculas.add(crearBoton(p));
+            }
+        }
         this.frmPrincipal.panelPeliculas.revalidate();
         this.frmPrincipal.panelPeliculas.repaint();
     }
