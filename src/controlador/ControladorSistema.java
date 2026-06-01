@@ -169,6 +169,12 @@ public class ControladorSistema implements ActionListener {
         
         if (usuario.isEmpty()||contraseña.isEmpty()){
             JOptionPane.showMessageDialog(null, "POR FAVOR DIGITE LOS DATOS COMPLETOS E INTENTE DE NUEVO");
+            return;
+        }
+        
+        if (buscarUsuario(usuario)==null){
+            JOptionPane.showMessageDialog(null, "USUARIO NO ENCONTRADO, VERIFIQUE LOS DATOS INGRESADOS");
+            return;
         }
         
         else {
