@@ -251,6 +251,8 @@ public class ControladorSistema implements ActionListener {
         for (Pelicula p: copiaPeliculas){
             this.frmPrincipal.panelPeliculas.add(crearBoton(p));
         }
+        this.frmPrincipal.panelPeliculas.revalidate();
+        this.frmPrincipal.panelPeliculas.repaint();
     }
     
     public void actualizarBotones (){
