@@ -43,7 +43,7 @@ public class JFCalificar extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(204, 0, 0));
+        jPanel1.setBackground(new java.awt.Color(153, 0, 0));
 
         lblPelicula.setBackground(new java.awt.Color(255, 255, 255));
         lblPelicula.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
